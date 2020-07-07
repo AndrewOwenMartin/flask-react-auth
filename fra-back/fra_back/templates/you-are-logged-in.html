@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    {% include "navigation.html" %}
+    <h1>Flask React Authentication Example App</h1>
+    <h2>Note: this a page from the API and should not be seen once the React App is in charge</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flash">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+    {% if current_user.is_authenticated %}
+        You are logged in as {{ current_user.email }}!
+        <a href="{{ url_for("logout") }}">Log out</a>
+    {% else %}
+        You are not logged in.
+        <a href="{{ url_for("google.login") }}">Log in</a>
+    {% endif %}
+    <h3>You are logged in</h3>
+    <h3>Auth data</h3>
+    {% for k,v in auth_data.items() %}
+        <p>{{k}}: {{v}}</p>
+    {% endfor %}
+    
+</body>
+</html>
+

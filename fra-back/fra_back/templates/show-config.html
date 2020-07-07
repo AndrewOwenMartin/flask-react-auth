@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Flask Config</h1>
+    <ol>
+    {% for k,v in config.items() %}
+    <li>{{k}}: {{v}}</li>
+    {% endfor %}
+    </ol>
+    <h2>Blueprint</h2>
+    {{ blueprint }}
+    {% include "navigation.html" %}
+
+</body>
+</html>
+
