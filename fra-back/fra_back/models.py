@@ -9,11 +9,13 @@ import flask_security
 import flask_dance.consumer.storage.sqla
 
 from logging import DEBUG, INFO, WARNING, ERROR, FATAL
+
 SILENT = 0
 
 log = logging.getLogger(__name__)
 
 Base = sqlalchemy.ext.declarative.declarative_base()
+
 
 class RoleUsers(Base):
 
@@ -23,19 +25,17 @@ class RoleUsers(Base):
 
     role_id = sql.Column(sql.ForeignKey("role.id"), primary_key=True, index=True)
 
-    __table_args__ = (
-        sql.Index(
-            "ix_roles_users_user_2_role_id", "user_id", "role_id"
-        ),
-    )
+    __table_args__ = (sql.Index("ix_roles_users_user_2_role_id", "user_id", "role_id"),)
+
 
 class Role(Base, flask_security.RoleMixin):
-    
+
     __tablename__ = "role"
 
     id = sql.Column(sql.Integer(), primary_key=True)
     name = sql.Column(sql.String(80), unique=True)
     description = sql.Column(sql.String(255))
+
 
 class User(Base, flask_security.UserMixin):
 
@@ -51,9 +51,7 @@ class User(Base, flask_security.UserMixin):
 
     confirmed_at = sql.Column(sql.DateTime())
 
-    roles = orm.relationship(
-        Role, secondary="roles_users", backref="users"
-    )
+    roles = orm.relationship(Role, secondary="roles_users", backref="users")
 
 
 class OAuth(Base, flask_dance.consumer.storage.sqla.OAuthConsumerMixin):
@@ -69,6 +67,7 @@ def create_new_db(path="sqlite:///fra_back/db.sqlite3"):
     Base.metadata.create_all(engine)
 
     log.info("created db at: %s", path)
+
 
 def main():
 

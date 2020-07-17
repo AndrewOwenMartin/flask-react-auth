@@ -5,9 +5,11 @@ import flask_dance.contrib.azure as azure_dance
 import flask_security.datastore
 
 from logging import DEBUG, INFO, WARNING, ERROR, FATAL
+
 SILENT = 0
 
 log = logging.getLogger(__name__)
+
 
 def make_azure_blueprint(config):
     """ Following the instructions at
@@ -26,20 +28,18 @@ https://flask-dance.readthedocs.io/en/latest/providers.html#module-flask_dance.c
         "redirect_to": "login_required",
     }
 
-    blueprint = azure_dance.make_azure_blueprint(
-        **config_kwargs,
-        **kwargs,
-    )
+    blueprint = azure_dance.make_azure_blueprint(**config_kwargs, **kwargs)
 
     return blueprint
+
 
 def populate_config_kwargs(arg_name2config_key, config):
 
     return {
         arg_name: config.get(config_key)
-        for arg_name, config_key
-        in arg_name2config_key.items()
+        for arg_name, config_key in arg_name2config_key.items()
     }
+
 
 def make_google_blueprint(config):
     """ Following the instructions at
@@ -53,30 +53,19 @@ https://flask-dance.readthedocs.io/en/latest/providers.html#module-flask_dance.c
 
     config_kwargs = populate_config_kwargs(arg_name2config_key, config)
 
-    kwargs = {
-        "scope": ["profile", "email"],
-        "redirect_to": "login_required",
-    }
+    kwargs = {"scope": ["profile", "email"], "redirect_to": "login_required"}
 
-    blueprint = google_dance.make_google_blueprint(
-        **config_kwargs,
-        **kwargs,
-    )
+    blueprint = google_dance.make_google_blueprint(**config_kwargs, **kwargs)
 
     return blueprint
 
 
 def is_authorized_any():
 
-    NAME2OAUTH_PROVIDER = {
-        "google": google_dance.google,
-        "azure": azure_dance.azure,
-    }
+    NAME2OAUTH_PROVIDER = {"google": google_dance.google, "azure": azure_dance.azure}
 
     auths = {
-        name: provider.authorized
-        for name, provider
-        in NAME2OAUTH_PROVIDER.items()
+        name: provider.authorized for name, provider in NAME2OAUTH_PROVIDER.items()
     }
 
     log = logging.getLogger("app")
@@ -86,7 +75,9 @@ def is_authorized_any():
     return any(auths.values())
 
 
-class SQLAlchemySessionDatastore(flask_security.datastore.Datastore, flask_security.datastore.UserDatastore):
+class SQLAlchemySessionDatastore(
+    flask_security.datastore.Datastore, flask_security.datastore.UserDatastore
+):
     def __init__(self, session, user_model, role_model):
         flask_security.datastore.Datastore.__init__(self, db=session)
         flask_security.datastore.UserDatastore.__init__(self, user_model, role_model)
@@ -99,6 +90,7 @@ def make_security(session, user_model, role_model):
     security = flask_security.Security(datastore=user_datastore)
 
     return user_datastore, security
+
 
 def main():
 
@@ -115,4 +107,3 @@ if __name__ == "__main__":
     )
 
     main()
-
