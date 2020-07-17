@@ -51,14 +51,18 @@ def show_config():
 def user():
     return 'only logged in users should see this'
 
-@app.route('/you-are-logged-in/')
-def you_are_logged_in():
+@app.route('/login-required/')
+def login_required():
 
     if not google_dance.google.authorized:
 
-        return flask.redirect(flask.url_for("google.login"))
+        google_login_url = flask.url_for("google.login")
 
-    response = google_dance.google.get("/user")
+        log.info("redirecting to google login url: %s", google_login_url)
+
+        return flask.redirect(google_login_url)
+
+    response = google_dance.google.get("/oauth2/v1/userinfo")
 
     log.info("Authorised: %s. Response is OK: %s", google_dance.google.authorized, response.ok)
 
@@ -68,9 +72,14 @@ def you_are_logged_in():
 
     else:
 
-        auth_data = {}
+        auth_data = {
+            "logged_in": "no",
+            "msg": "response.ok was falsy",
+        }
 
-    return flask.render_template("you-are-logged-in.html", auth_data=auth_data)
+    picture = auth_data.pop("picture", None)
+
+    return flask.render_template("login-required.html", auth_data=auth_data, picture=picture)
 
 def main():
 

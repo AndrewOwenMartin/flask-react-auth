@@ -9,21 +9,33 @@ SILENT = 0
 log = logging.getLogger(__name__)
 
 def make_google_blueprint(config):
+    """ Following the instructions at
+https://flask-dance.readthedocs.io/en/latest/providers.html#module-flask_dance.contrib.google
+"""
 
     arg_name2config_key = {
         "client_id": "GOOGLE_CLIENT_ID",
         "client_secret": "GOOGLE_SECRET",
     }
 
-    kwargs = {
+    config_kwargs = {
         arg_name: config.get(config_key)
         for arg_name, config_key
         in arg_name2config_key.items()
     }
 
-    blueprint = google_dance.make_google_blueprint(**kwargs)
+    kwargs = {
+        "scope": ["profile", "email"],
+    }
+
+    blueprint = google_dance.make_google_blueprint(
+        **config_kwargs,
+        **kwargs,
+    )
 
     return blueprint
+
+
 
 class SQLAlchemySessionDatastore(flask_security.datastore.Datastore, flask_security.datastore.UserDatastore):
     def __init__(self, session, user_model, role_model):

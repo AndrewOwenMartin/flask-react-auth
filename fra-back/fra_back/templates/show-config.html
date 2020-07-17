@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>FRA Back - Show Config</title>
 </head>
 <body>
+    {% include "navigation.html" %}
     <h1>Flask Config</h1>
     <ol>
     {% for k,v in config.items() %}
