@@ -32,3 +32,19 @@ This created the token:
  - Client Secret: SBxXnxT_oytQvATcaWmHduw1
 
 I added these values to the the [Flask instance config file](./fra-back/instance/config.py) under the keys `GOOGLE_CLIENT_ID` and `GOOGLE_SECRET`
+
+## Microsoft Azure
+
+I went to `azure.portal.com` and logged in as `andrew.martin@fact360.co`, clicked through to Azure Active Directory. This is a Tenant with ID f8cdef31-a31e-4b4a-93e4-5f571e91255a. I registered an app called `fra-back` with a client id 38d63387-7cb0-4620-a539-e9849b5b8b33. When asked "Who can use this application or access this API?" I answered "Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)". I added the redirect url:
+ - type: web
+ - url: http://localhost:5001/login/azure/authorized
+
+I then went to "certificates & secrets", and chose to add a new client secret:
+ - Description: OAuth2 for Azure fra-back
+ - Expires: Never
+
+API Permissions were left at their default: Microsoft Graph -> User.Read.
+
+I added branding:
+ - name: fra-back,
+ - home page url: http://localhost:5001
