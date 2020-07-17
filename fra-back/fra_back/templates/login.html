@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "head.html" %}
+    <title>FRA Back - Login</title>
+</head>
+<body>
+    {% include "navigation.html" %}
+    You need to log in with one of these providers.
+    <ul>
+        {% for name, login_url in providers %}
+            <li><a href="{{login_url}}">{{name}}</a></li>
+        {% endfor %}
+    <ul>
+</body>
+</html>
+

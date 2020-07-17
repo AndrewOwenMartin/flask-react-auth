@@ -30,6 +30,7 @@ def create_app():
     app.secret_key = app.config.get("SECRET_KEY")
 
     app.register_blueprint(app_helpers.make_google_blueprint(config=app.config), url_prefix="/login")
+    app.register_blueprint(app_helpers.make_azure_blueprint(config=app.config), url_prefix="/login")
 
     app.logger.setLevel(logging.DEBUG)
 
@@ -37,6 +38,19 @@ def create_app():
 
 app = create_app()
 log = app.logger
+
+@app.context_processor
+def inject_globals():
+    """ Add 'providers' to the context of each template """
+
+    providers = [
+        ("Google", flask.url_for("google.login")),
+        ("Azure", flask.url_for("azure.login")),
+    ]
+
+    return dict(
+        providers=providers,
+    )
 
 @app.route('/')
 def index():
@@ -51,20 +65,25 @@ def show_config():
 def user():
     return 'only logged in users should see this'
 
+@app.route('/login/')
+def login():
+
+    return flask.render_template("login.html")
+
 @app.route('/login-required/')
 def login_required():
 
-    if not google_dance.google.authorized:
+    if not app_helpers.is_authorized_any():
 
-        google_login_url = flask.url_for("google.login")
+        login_url = flask.url_for("login")
 
-        log.info("redirecting to google login url: %s", google_login_url)
+        log.info("redirecting to 'choose your provider' login url: %s", login_url)
 
-        return flask.redirect(google_login_url)
+        return flask.redirect(login_url)
 
     response = google_dance.google.get("/oauth2/v1/userinfo")
 
-    log.info("Authorised: %s. Response is OK: %s", google_dance.google.authorized, response.ok)
+    log.info("Authorized: %s. Response is OK: %s", google_dance.google.authorized, response.ok)
 
     if response.ok:
 
@@ -77,7 +96,7 @@ def login_required():
             "msg": "response.ok was falsy",
         }
 
-    picture = auth_data.pop("picture", None)
+    picture = auth_data.setdefault("picture", None)
 
     return flask.render_template("login-required.html", auth_data=auth_data, picture=picture)
 
