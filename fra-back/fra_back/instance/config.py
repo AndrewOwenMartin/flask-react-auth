@@ -21,3 +21,7 @@ SECRET_KEY = "flkjelkjsflksjeofiudroigursj,fna,lcnlidfgdhtkjasf;lnasc klydhfkasj
 # Flask-Security
 SECURITY_PASSWORD_SALT = "aslkjlsdkfjoidunrkjbg9ousjdld"
 SECURITY_PASSWORD_HASH = "bcrypt"
+SECURITY_CONFIRMABLE = False  # I think this is for email confirmation.
+
+# This enables the fields last_login_at, current_login_at, last_login_ip, current_login_ip, login_count.
+SECURITY_TRACKABLE = True

@@ -1,0 +1,12 @@
+To override the standard flask-security templates put files in this directory with the appropriate names.
+
+Names are:
+forgot_password.html
+login_user.html
+register_user.html
+reset_password.html
+change_password.html
+send_confirmation.html
+send_login.html
+
+Originals can be found in $VIRTUAL_ENV/lib/python3.7/site-packages/flask_security/templates/

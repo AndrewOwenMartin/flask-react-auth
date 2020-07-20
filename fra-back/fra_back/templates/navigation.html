@@ -2,8 +2,11 @@
 <ol>
     <li><a href="/">Home</a></li>
     <li><a href="/show-config/">Show config</a></li>
-    <li><a href="/login-required/">Login required page</a></li>
-    <li><a href="{{ url_for('login') }}">Login</a></li>
+    <li><a href="{{ url_for('oauth_status') }}">Oauth status</a></li>
+    <li><a href="{{ url_for('user') }}">Local login required page</a></li>
+    <li><a href="{{ url_for('security.login') }}">Local login page</a></li>
+    <li><a href="{{ url_for('security.logout') }}">Local logout</a></li>
+    <li><a href="{{ url_for('select_oauth_provider') }}">Login with Google or Microsoft</a></li>
     <!--
     <li><a href=""></a></li>
     -->

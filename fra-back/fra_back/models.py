@@ -43,6 +43,25 @@ class User(db.Model, flask_security.UserMixin):
 
     roles = db.relationship(Role, secondary="roles_users", backref="users")
 
+    last_login_at = db.Column(db.DateTime())
+
+    current_login_at = db.Column(db.DateTime())
+
+    last_login_ip = db.Column(db.String(100))
+
+    current_login_ip = db.Column(db.String(100))
+
+    login_count = db.Column(db.Integer)
+
+    # Can use this to override the 'security payload'
+    # def get_security_payload(self):
+
+    #    return {
+    #        'id': self.id,
+    #        'name': self.name,
+    #        'email': self.email
+    #    }
+
 
 if __name__ == "__main__":
 

@@ -1,0 +1,19 @@
+<h2>Auth Data</h2>
+{% for provider in auth_data %}
+    <h3>{{provider.name}}</h3>
+    {% if provider.authorized %}
+        <p>Authorized</p>
+    {% else %}
+        <p>Not authorized</p>
+    {% endif %}
+    {% if provider.info.error %}
+        <p>Error: {{ provider.info.error }}</p>
+    {% else %}
+        <h4>Info</h4>
+        <ul>
+        {% for key, value in provider.info.items() %}
+            <li><b>{{ key }}</b>: {{ value }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endfor %}
