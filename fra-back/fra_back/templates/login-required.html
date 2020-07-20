@@ -24,13 +24,17 @@
         current_user.is_authenticated is falsy
         <a href="{{ url_for('google.login') }}">Log in</a>
     {% endif %}
-    <h3>Auth data</h3>
-    {% for k,v in auth_data.items() %}
+    <h3>Google Auth data</h3>
+    {% for k,v in google_auth_data.items() %}
         <p>{{k}}: {{v}}</p>
     {% endfor %}
-    {% if picture %}
-        <img src={{picture}} />
+    {% if google_picture %}
+        <img src={{google_picture}} />
     {% endif %}
+    <h3>Azure Auth data</h3>
+    {% for k,v in azure_auth_data.items() %}
+        <p>{{k}}: {{v}}</p>
+    {% endfor %}
     
 </body>
 </html>

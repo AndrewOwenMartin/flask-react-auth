@@ -5,6 +5,7 @@ import sqlalchemy as sql
 import sqlalchemy.orm as orm
 import fra_back.app_helpers as app_helpers
 import flask_dance.contrib.google as google_dance
+import flask_dance.contrib.azure as azure_dance
 import flask_security
 import fra_back.models as db
 from logging import DEBUG, INFO, WARNING, ERROR, FATAL
@@ -93,26 +94,40 @@ def login_required():
 
         return flask.redirect(login_url)
 
-    response = google_dance.google.get("/oauth2/v1/userinfo")
+    google_response = google_dance.google.get("/oauth2/v1/userinfo")
 
     log.info(
         "Authorized: %s. Response is OK: %s",
         google_dance.google.authorized,
-        response.ok,
+        google_response.ok,
     )
 
-    if response.ok:
+    if google_response.ok:
 
-        auth_data = response.json()
+        google_auth_data = google_response.json()
 
     else:
 
-        auth_data = {"logged_in": "no", "msg": "response.ok was falsy"}
+        google_auth_data = {"logged_in": "no", "msg": "response.ok was falsy"}
 
-    picture = auth_data.setdefault("picture", None)
+    google_picture = google_auth_data.setdefault("picture", None)
+
+    # azure_response = azure_dance.azure.get("https://graph.microsoft.com/v1.0/users")
+    azure_response = azure_dance.azure.get("/v1.0/me")
+
+    if azure_response.ok:
+
+        azure_auth_data = azure_response.json()
+
+    else:
+
+        azure_auth_data = {"logged_in": "no", "msg": "response.ok was falsy"}
 
     return flask.render_template(
-        "login-required.html", auth_data=auth_data, picture=picture
+        "login-required.html",
+        google_auth_data=google_auth_data,
+        google_picture=google_picture,
+        azure_auth_data=azure_auth_data,
     )
 
 
