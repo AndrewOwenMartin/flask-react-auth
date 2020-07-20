@@ -17,3 +17,7 @@ GOOGLE_CLIENT_ID = (
 GOOGLE_SECRET = "SBxXnxT_oytQvATcaWmHduw1"
 
 SECRET_KEY = "flkjelkjsflksjeofiudroigursj,fna,lcnlidfgdhtkjasf;lnasc klydhfkasjefjksdrgfilaysi8r4jk"
+
+# Flask-Security
+SECURITY_PASSWORD_SALT = "aslkjlsdkfjoidunrkjbg9ousjdld"
+SECURITY_PASSWORD_HASH = "bcrypt"

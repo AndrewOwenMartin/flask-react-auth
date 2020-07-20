@@ -21,8 +21,11 @@ security = flask_security.Security(app, user_datastore)
 def init_data():
     log.info("Attempting to create db at %s", app.config["SQLALCHEMY_DATABASE_URI"])
     db.create_all()
-    user_datastore.create_user(email="matt@nobien.net", password="password")
-    db.session.commit()
+    if not db.session.query(fra_back.models.User).count():
+        user = dict(email="matt@nobien.net", password="password")
+        user_datastore.create_user(**user)
+        log.info("created user: %s", user)
+        db.session.commit()
 
 
 @app.context_processor
@@ -49,6 +52,7 @@ def show_config():
 
 
 @app.route("/user/")
+@flask_security.login_required
 def user():
     return "only logged in users should see this"
 

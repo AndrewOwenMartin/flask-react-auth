@@ -1,4 +1,5 @@
 import logging
+import flask_security
 from fra_back.app_init import db
 
 log = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ class RoleUsers(db.Model):
     __table_args__ = (db.Index("ix_roles_users_user_2_role_id", "user_id", "role_id"),)
 
 
-class Role(db.Model):
+class Role(db.Model, flask_security.RoleMixin):
 
     __tablename__ = "role"
 
@@ -26,7 +27,7 @@ class Role(db.Model):
     description = db.Column(db.String(255))
 
 
-class User(db.Model):
+class User(db.Model, flask_security.UserMixin):
 
     __tablename__ = "user"
 

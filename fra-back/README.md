@@ -7,9 +7,8 @@ A flask app, reliant on these libraries installed with pip:
  - [`Flask-SQLAlchemy-Session`](https://flask-sqlalchemy-session.readthedocs.io/en/v1.1/#comparison-with-flask-sqlalchemy): To handle SQLAlchemt sessions in flask.
  - `SQLAlchemy`: Handles storage of users, roles, and sessions.
  - `email_validator`: Required by Flask-Security, but not listed as a dependency for some reason.
-
-I think I'll also use this, but not sure yet.
  - [`Flask-Dance`](https://flask-dance.readthedocs.io/en/latest/): Handles OAuth for us, installed with `pip install Flask-Dance[sqla]`
+ - `bcrypt`: Else flask security can't hash passwords.
 
 ## Microsoft integration - Coding the Flask App
 
@@ -33,7 +32,9 @@ This allows me to pass this data into templates and to check that the user has l
 
 # SQLAlchemy integration
 
-I made the system use `flask-sqlalchemy`.
+I made the system use `flask-sqlalchemy`. I had a lot of trouble getting [`db.create_all()`](./fra_back/app.py#L23) working.
+The documentation and stackoverflow suggested it was to do with the order of imports and initialisation.
+I had to split `app.py` into [`app.py`](./fra_back/app.py) and [`app_init.py`](./fra_back/app.py) to avoid circular imports.
 
 ## templates
 
