@@ -3,6 +3,7 @@ from fra_back.app_init import db
 
 log = logging.getLogger(__name__)
 
+
 class RoleUsers(db.Model):
 
     __tablename__ = "roles_users"
@@ -40,8 +41,6 @@ class User(db.Model):
     confirmed_at = db.Column(db.DateTime())
 
     roles = db.relationship(Role, secondary="roles_users", backref="users")
-
-
 
 
 if __name__ == "__main__":

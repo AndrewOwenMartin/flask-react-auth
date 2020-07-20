@@ -3,7 +3,7 @@ SERVER = "http://localhost:5001"
 
 # Database
 SQLALCHEMY_DATABASE_URI = "sqlite:///db/db.sqlite3"
-SQLALCHEMY_TRACK_MODIFICATIONS = False # See
+SQLALCHEMY_TRACK_MODIFICATIONS = False  # See
 # https://stackoverflow.com/questions/33738467/how-do-i-know-if-i-can-disable-sqlalchemy-track-modifications/33790196#33790196
 
 # Microsoft

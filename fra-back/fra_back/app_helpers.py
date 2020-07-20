@@ -11,12 +11,6 @@ SILENT = 0
 log = logging.getLogger(__name__)
 
 
-
-
-
-
-
-
 def is_authorized_any():
 
     NAME2OAUTH_PROVIDER = {"google": google_dance.google, "azure": azure_dance.azure}
