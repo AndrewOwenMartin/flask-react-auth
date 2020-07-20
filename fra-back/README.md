@@ -31,6 +31,10 @@ As the Flask blueprint returned by `fra_back.app_helpers.make_google_blueprint` 
 
 This allows me to pass this data into templates and to check that the user has logged in with a valid Google account. Note, this does not have anything to do with authentication of local users under `current_user.is_authenticated`, just that the app currently has access to at least one google account. The next step is to make the local user authentication receive info from the Google account.
 
+# SQLAlchemy integration
+
+I made the system use `flask-sqlalchemy`.
+
 ## templates
 
 The templates directory holds the HTML templates, these were largely copied from the equivalent directory in Microsoft's [Azure-Samples/ms-identity-python-webapp](https://github.com/Azure-Samples/ms-identity-python-webapp).

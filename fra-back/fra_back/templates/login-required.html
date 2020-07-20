@@ -17,7 +17,7 @@
         </ul>
     {% endif %}
     {% endwith %}
-    {% if current_user.is_authenticated %}
+    {% if current_user and current_user.is_authenticated %}
         You are logged in x as {{ current_user.email }}!
         <a href="{{ url_for("logout") }}">Log out</a>
     {% else %}
