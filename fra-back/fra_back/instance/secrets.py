@@ -1,0 +1,13 @@
+# Microsoft
+AZURE_OAUTH_CLIENT_SECRET = ""
+
+# Google
+GOOGLE_SECRET = ""
+
+# GitHub
+GITHUB_OAUTH_CLIENT_SECRET = ""
+
+SECRET_KEY = ""
+
+# Flask-Security
+SECURITY_PASSWORD_SALT = ""
