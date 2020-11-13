@@ -1,6 +1,7 @@
 <h2>Auth Data</h2>
 {% for provider in auth_data %}
     <h3>{{provider.name}}</h3>
+    {{provider}}
     {% if provider.authorized %}
         <p>Authorized</p>
     {% else %}
@@ -10,6 +11,7 @@
         <p>Error: {{ provider.info.error }}</p>
     {% else %}
         <h4>Info</h4>
+        Info: {{provider.info}}
         <ul>
         {% for key, value in provider.info.items() %}
             <li><b>{{ key }}</b>: {{ value }}</li>

@@ -1,67 +1,113 @@
 import logging
 import flask_security
-from fra_back.app_init import db
+import flask_dance.consumer.storage.sqla
+import sqlalchemy as sql
+import sqlalchemy.ext.declarative
+import sqlalchemy.orm as orm
 
 log = logging.getLogger(__name__)
 
+Base = sqlalchemy.ext.declarative.declarative_base()
 
-class RoleUsers(db.Model):
+def create_all(session):
+
+    app_log = logging.getLogger("fra_back.app_init")
+
+    app_log.info("create all info log: XXXXXXXX")
+
+    engine = session.get_bind()
+
+    Base.metadata.create_all(engine)
+
+class RoleUsers(Base):
 
     __tablename__ = "roles_users"
 
-    user_id = db.Column(db.ForeignKey("user.id"), primary_key=True, index=True)
+    user_id = sql.Column(sql.ForeignKey("user.id"), primary_key=True, index=True)
 
-    role_id = db.Column(db.ForeignKey("role.id"), primary_key=True, index=True)
+    role_id = sql.Column(sql.ForeignKey("role.id"), primary_key=True, index=True)
 
-    __table_args__ = (db.Index("ix_roles_users_user_2_role_id", "user_id", "role_id"),)
+    __table_args__ = (sql.Index("ix_roles_users_user_2_role_id", "user_id", "role_id"),)
 
 
-class Role(db.Model, flask_security.RoleMixin):
+class Role(Base, flask_security.RoleMixin):
 
     __tablename__ = "role"
 
-    id = db.Column(db.Integer(), primary_key=True)
+    id = sql.Column(sql.Integer(), primary_key=True)
 
-    name = db.Column(db.String(80), unique=True)
+    name = sql.Column(sql.String(80), unique=True)
 
-    description = db.Column(db.String(255))
+    description = sql.Column(sql.String(255))
 
 
-class User(db.Model, flask_security.UserMixin):
+class User(Base, flask_security.UserMixin):
 
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = sql.Column(sql.Integer, primary_key=True)
 
-    email = db.Column(db.String(255), unique=True)
+    email = sql.Column(sql.String(255), unique=True)
 
-    password = db.Column(db.String(255))
+    name = sql.Column(sql.String(255))
 
-    active = db.Column(db.Boolean())
+    active = sql.Column(sql.Boolean())
 
-    confirmed_at = db.Column(db.DateTime())
+    confirmed_at = sql.Column(sql.DateTime())
 
-    roles = db.relationship(Role, secondary="roles_users", backref="users")
+    roles = orm.relationship(Role, secondary="roles_users", backref="users")
 
-    last_login_at = db.Column(db.DateTime())
+    last_login_at = sql.Column(sql.DateTime())
 
-    current_login_at = db.Column(db.DateTime())
+    current_login_at = sql.Column(sql.DateTime())
 
-    last_login_ip = db.Column(db.String(100))
+    last_login_ip = sql.Column(sql.String(100))
 
-    current_login_ip = db.Column(db.String(100))
+    current_login_ip = sql.Column(sql.String(100))
 
-    login_count = db.Column(db.Integer)
+    login_count = sql.Column(sql.Integer)
+
+    def to_log(self):
+
+        return dict(
+            id=self.id,
+            name=self.name,
+        )
 
     # Can use this to override the 'security payload'
-    # def get_security_payload(self):
+    def get_security_payload(self):
 
-    #    return {
-    #        'id': self.id,
-    #        'name': self.name,
-    #        'email': self.email
-    #    }
+        raise NotImplementedError("don't know who calls this when")
 
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email
+        }
+
+class OAuth(Base, flask_dance.consumer.storage.sqla.OAuthConsumerMixin):
+
+    # id = Column(Integer, primary_key=True)
+    # provider = Column(String(50), nullable=False)
+    # created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    # token = Column(MutableDict.as_mutable(JSONType), nullable=False)
+
+    user_id = sql.Column(sql.ForeignKey("user.id"))
+
+    user = orm.relationship(User, backref="oauth")
+
+    key = sql.Column(sql.String(255), unique=True, index=True)
+
+class Corpus(Base):
+
+    __tablename__ = "corpus"
+
+    id = sql.Column(sql.Integer, primary_key=True)
+    name = sql.Column(sql.String, unique=True, index=True)
+    path = sql.Column(sql.Text)
+
+    def __repr__(self):
+        return "<Corpus:{corpus_id} {name}>".format(corpus_id=self.id, name=self.name)
 
 if __name__ == "__main__":
 

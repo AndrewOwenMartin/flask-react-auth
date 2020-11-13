@@ -8,6 +8,26 @@
     <h1>Flask React Authentication Example App</h1>
     <h2>Note: this is the root of the API and should not be seen once the React App is in charge</h2>
     {% include "navigation.html" %}
+    <h2>User list ({{ user_list|length }})</h2>
+    <ul>
+    {% for user in user_list %}
+        <li>{{user.id}}. {{user.name}} ({{user.oauth[0].provider}})</li>
+    {% endfor %}
+    </ul>
+    <h2>Role list ({{ role_list|length }})</h2>
+    <ul>
+    {% for role in role_list %}
+        <li>{{role.id}}. {{role.name}}</li>
+    {% endfor %}
+    </ul>
+    <h2>Session info</h2>
+    {% if current_user and current_user.is_authenticated %}
+        <p>You are logged in as {{ current_user.name }} ({{ current_user.oauth[0].provider }}).</p>
+        <a href="{{ url_for("security.logout") }}">Log out</a>
+    {% else %}
+        <p>current_user.is_authenticated is falsy</p>
+        <a href="{{ url_for('security.login') }}">Log in</a>
+    {% endif %}
     {% include "auth-data.html" %}
 </body>
 </html>

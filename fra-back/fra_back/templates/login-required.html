@@ -9,30 +9,22 @@
     <h1>Flask React Authentication Login Required Page</h1>
     <h2>Note: this a page from the API and should not be seen once the React App is in charge</h2>
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul class="flash">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
+        {% if messages %}
+            <ul class="flash">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
     {% endwith %}
     {% if current_user and current_user.is_authenticated %}
-        You are logged in as {{ current_user.email }}!
+        You are logged in as {{ current_user.name }} ({{ current_user.oauth[0].provider }}).
         <a href="{{ url_for("security.logout") }}">Log out</a>
     {% else %}
         current_user.is_authenticated is falsy
-        <a href="{{ url_for('google.login') }}">Log in</a>
+        <a href="{{ url_for('security.login') }}">Log in</a>
     {% endif %}
-    <h3>Google Auth data</h3>
-    {% for k,v in google_auth_data.items() %}
-        <p>{{k}}: {{v}}</p>
-    {% endfor %}
-    <h3>Azure Auth data</h3>
-    {% for k,v in azure_auth_data.items() %}
-        <p>{{k}}: {{v}}</p>
-    {% endfor %}
-    
+    {% include "auth-data.html" %}
 </body>
 </html>
 
